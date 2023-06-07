@@ -1,12 +1,37 @@
-﻿<Window x:Class="LV_CATEGORISATION.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LV_CATEGORISATION"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+﻿<Window
+    x:Class="LV_CATEGORISATION.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:LV_CATEGORISATION"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    Background="AliceBlue"
+    mc:Ignorable="d">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  upper section  -->
+        <!--  middle section  -->
+        <!--  lower section  -->
+
+        <TextBox       Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Name="UI02" Margin="6" VerticalAlignment="Center" Text="{Binding ResultsFileName}" />
+        <Button        Grid.Row="2" Grid.Column="2" Name="BU01" Click="BU01ButtonClicked" Content="Load results from file" />
+            
+            
+            
+
 
     </Grid>
 </Window>
