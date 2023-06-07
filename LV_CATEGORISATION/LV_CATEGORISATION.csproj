@@ -18,6 +18,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Sylvan.Data" Version="0.2.12" />
+    <PackageReference Include="Sylvan.Data.Excel" Version="0.4.12" />
   </ItemGroup>
 
   <ItemGroup>

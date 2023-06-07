@@ -1,19 +1,13 @@
-﻿using Microsoft.Win32;
+﻿using LV_CATEGORISATION.Entities;
+using Microsoft.Win32;
+using Sylvan.Data;
+using Sylvan.Data.Excel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
+
 
 namespace LV_CATEGORISATION
 {
@@ -24,14 +18,27 @@ namespace LV_CATEGORISATION
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private List<InputResult> _listOfInputResults;
+
+        public List<InputResult> ListOfInputResults
+        {
+            get { return _listOfInputResults; }
+            set 
+            { 
+                _listOfInputResults = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ListOfInputResults)));
+            }
+        }
+
+
         private string _resultsFileName;
-        public string ResultsFileName
+        public string ResultsFilePath
         {
             get { return _resultsFileName; }
             set 
             { 
                 _resultsFileName = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultsFileName)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultsFilePath)));
             }
         }
 
@@ -51,7 +58,36 @@ namespace LV_CATEGORISATION
                 if (openFileDialog.ShowDialog() == true)
                 {
                     // Display selected file in UI
-                    ResultsFileName = openFileDialog.FileName;
+                    ResultsFilePath = openFileDialog.FileName;
+                    // string ResultsFileName = System.IO.Path.GetFileName(ResultsFilePath);
+
+                    // Read in results from .xlsx file
+                    ExcelDataReader edr = ExcelDataReader.Create(ResultsFilePath);
+
+                    //do
+                    //{
+                    //    var sheetname = edr.WorksheetName;
+                    //    // enumerate rows in current sheet
+
+                    //    while (edr.Read())
+                    //    {
+                    //        // iterate cells in row
+                    //        for (int i = 0; i < edr.FieldCount; i++)
+                    //        {
+                    //            var value = edr.GetString(i);
+                    //        }
+
+                    //    }
+
+                    //} while (edr.NextResult());
+                    var Records = edr.GetRecords<InputResult>();
+                    ListOfInputResults = new(edr.GetRecords<InputResult>());
+
+                    foreach (InputResult item in Records)
+                    {
+                        //Console.WriteLine($"{item.Positionsnummer}");
+                        
+                    }
                     
                 }
 
@@ -65,6 +101,6 @@ namespace LV_CATEGORISATION
 
 
 
-        }
+}
     }
 }

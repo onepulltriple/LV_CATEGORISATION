@@ -24,9 +24,19 @@
 
         <!--  upper section  -->
         <!--  middle section  -->
+        <DataGrid
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.RowSpan="2"
+            IsReadOnly="True"
+            Name="DataGrid01"
+            ItemsSource="{Binding ListOfInputResults}"
+            
+            />
         <!--  lower section  -->
 
-        <TextBox       Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Name="UI02" Margin="6" VerticalAlignment="Center" Text="{Binding ResultsFileName}" />
+        <TextBox       Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Name="UI02" Margin="6" VerticalAlignment="Center" Text="{Binding ResultsFilePath}" />
         <Button        Grid.Row="2" Grid.Column="2" Name="BU01" Click="BU01ButtonClicked" Content="Load results from file" />
             
             
