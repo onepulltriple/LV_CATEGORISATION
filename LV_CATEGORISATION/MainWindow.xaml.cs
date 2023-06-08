@@ -1,13 +1,14 @@
 ﻿using LV_CATEGORISATION.Entities;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using Sylvan.Data;
 using Sylvan.Data.Excel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
-
-
+using System.Windows.Media.Animation;
 
 namespace LV_CATEGORISATION
 {
@@ -16,6 +17,8 @@ namespace LV_CATEGORISATION
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        readonly LvCategorisationContext _context;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private List<InputResult> _listOfInputResults;
@@ -30,25 +33,26 @@ namespace LV_CATEGORISATION
             }
         }
 
-
         private string _resultsFileName;
-        public string ResultsFilePath
+        public string ResultsFileFullPath
         {
             get { return _resultsFileName; }
             set 
             { 
                 _resultsFileName = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultsFilePath)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultsFileFullPath)));
             }
         }
+
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
+            _context = new();
         }
 
-        private void BU01ButtonClicked(object sender, RoutedEventArgs e)
+        private void LOADButtonClicked(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -58,49 +62,70 @@ namespace LV_CATEGORISATION
                 if (openFileDialog.ShowDialog() == true)
                 {
                     // Display selected file in UI
-                    ResultsFilePath = openFileDialog.FileName;
-                    // string ResultsFileName = System.IO.Path.GetFileName(ResultsFilePath);
+                    ResultsFileFullPath = openFileDialog.FileName;
 
                     // Read in results from .xlsx file
-                    ExcelDataReader edr = ExcelDataReader.Create(ResultsFilePath);
-
-                    //do
-                    //{
-                    //    var sheetname = edr.WorksheetName;
-                    //    // enumerate rows in current sheet
-
-                    //    while (edr.Read())
-                    //    {
-                    //        // iterate cells in row
-                    //        for (int i = 0; i < edr.FieldCount; i++)
-                    //        {
-                    //            var value = edr.GetString(i);
-                    //        }
-
-                    //    }
+                    ExcelDataReader edr = ExcelDataReader.Create(ResultsFileFullPath);
 
                     //} while (edr.NextResult());
                     var Records = edr.GetRecords<InputResult>();
                     ListOfInputResults = new(edr.GetRecords<InputResult>());
-
-                    foreach (InputResult item in Records)
-                    {
-                        //Console.WriteLine($"{item.Positionsnummer}");
-                        
-                    }
-                    
                 }
-
-
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
                 //throw exc;
             }
+        }
 
+        private void TODBButtonClicked(object sender, RoutedEventArgs e)
+        {
+            if (ListOfInputResults.IsNullOrEmpty())
+            {
+                MessageBox.Show("Please load a results file first.");
+                return;
+            }
 
+            foreach (InputResult item in ListOfInputResults)
+            {
+                if (item == ListOfInputResults.First())
+                {
+                    MessageBox.Show("First item successfully transfered to database. Please wait.");
+                }
 
-}
+                Result tempResult = TransferProperties(new Result(), item);
+                _context.Add(tempResult);
+                _context.SaveChanges();
+
+                if (item == ListOfInputResults.Last())
+                {
+                    MessageBox.Show("Last item successfully transfered to database.");
+                }
+            }
+            
+        }
+
+        private Result TransferProperties(Result toFill, InputResult origin)
+        {
+            //toFill.Id = origin.Id;
+            toFill.Positionsnummer = origin.Positionsnummer;
+            toFill.Kurztext = origin.Kurztext;
+            toFill.Menge = origin.Menge;
+            toFill.Einheiten = origin.Einheiten;
+            toFill.Langtext = origin.Langtext;
+            toFill.Lokale = origin.Lokale;
+            toFill.Filter = origin.Filter;
+            toFill.Beschreibung = origin.Beschreibung;
+            toFill.WeitereBemerkungen = origin.WeitereBemerkungen;
+            toFill.Treffer = origin.Treffer;
+
+            return toFill;
+        }
+
+        private void EXITButtonClicked(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }
