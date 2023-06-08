@@ -18,7 +18,7 @@ USE LV_CATEGORISATION
 --DROP TABLE RESULTS
 CREATE TABLE RESULTS (
 	id int PRIMARY KEY IDENTITY(1,1),
-	Positionsnummer varchar(20), -- resize to 100 later
+	Positionsnummer varchar(100), 
 	Kurztext varchar(1000),
 	Menge decimal,
 	Einheiten varchar(20),

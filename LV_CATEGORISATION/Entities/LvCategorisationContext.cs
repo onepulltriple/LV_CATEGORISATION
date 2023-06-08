@@ -25,7 +25,7 @@ public partial class LvCategorisationContext : DbContext
     {
         modelBuilder.Entity<Result>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__RESULTS__3213E83F97979ADC");
+            entity.HasKey(e => e.Id).HasName("PK__RESULTS__3213E83FDCCA66F2");
 
             entity.ToTable("RESULTS");
 
@@ -50,7 +50,7 @@ public partial class LvCategorisationContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Menge).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Positionsnummer)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.Treffer)
                 .HasMaxLength(500)
